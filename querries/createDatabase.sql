@@ -13,7 +13,17 @@ CREATE TABLE IF NOT EXISTS application.employees
     title_id integer NOT NULL,
     manager_id integer,
     team integer,
-    CONSTRAINT employees_pkey PRIMARY KEY (id)
+    CONSTRAINT employees_pkey PRIMARY KEY (id),
+    CONSTRAINT team_id_fk FOREIGN KEY (team)
+        REFERENCES application.teams (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT title_id_fk FOREIGN KEY (title_id)
+        REFERENCES application.titles (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID
 )
 
 TABLESPACE pg_default;
@@ -83,7 +93,12 @@ CREATE TABLE IF NOT EXISTS application.team_project
     CONSTRAINT project_id_fk FOREIGN KEY (project_id)
         REFERENCES application.projects (id) MATCH SIMPLE
         ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT team_id_fk FOREIGN KEY (team_id)
+        REFERENCES application.teams (id) MATCH SIMPLE
+        ON UPDATE CASCADE
         ON DELETE CASCADE
+        NOT VALID
 )
 
 TABLESPACE pg_default;
@@ -109,4 +124,23 @@ CREATE TABLE IF NOT EXISTS application.teams
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS application.teams
+    OWNER to "Femi";
+
+
+-- Creating tttles table
+-- Table: application.titles
+
+-- DROP TABLE IF EXISTS application.titles;
+
+CREATE TABLE IF NOT EXISTS application.titles
+(
+    id integer NOT NULL DEFAULT nextval('application.titles_id_seq'::regclass),
+    name character varying COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT titles_pkey PRIMARY KEY (id),
+    CONSTRAINT title_name_unique UNIQUE (name)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS application.titles
     OWNER to "Femi";
