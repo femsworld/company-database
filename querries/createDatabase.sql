@@ -21,16 +21,27 @@ ALTER TABLE
 -- Creating hour_tracking table
 -- Table: application.hour_tracking
 -- DROP TABLE IF EXISTS application.hour_tracking;
-CREATE TABLE IF NOT EXISTS application.hour_tracking (
+
+CREATE TABLE IF NOT EXISTS application.hour_tracking
+(
     employee_id integer NOT NULL,
     project_id integer,
-    total_hours integer NOT NULL,
-    CONSTRAINT employee_id_fk FOREIGN KEY (employee_id) REFERENCES application.employees (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT project_id_fk FOREIGN KEY (project_id) REFERENCES application.projects (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE NOT VALID
-) TABLESPACE pg_default;
+    total_hours numeric NOT NULL,
+    CONSTRAINT employee_id_fk FOREIGN KEY (employee_id)
+        REFERENCES application.employees (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT project_id_fk FOREIGN KEY (project_id)
+        REFERENCES application.projects (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID
+)
 
-ALTER TABLE
-    IF EXISTS application.hour_tracking OWNER to "Femi";
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS application.hour_tracking
+    OWNER to "Femi";
 
 -- Creating projects table
 -- Table: application.projects
